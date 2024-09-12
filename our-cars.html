@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Cars Page</title>
+    <style>
+        /* Existing CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            animation: fadeIn 1s ease-in;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        nav ul {
+            padding: 0;
+            list-style-type: none;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
+
+        nav ul li a.active {
+            background-color: #4CAF50;
+        }
+
+        main {
+            padding: 2rem;
+        }
+
+        .search-bar {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-bar button {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #45a049;
+        }
+
+        .search-results {
+            text-align: left;
+            margin-top: 5px;
+            max-height: 150px;
+            overflow-y: auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            position: absolute;
+            width: 300px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+        .search-results a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .search-results a:last-child {
+            border-bottom: none;
+        }
+
+        .search-results a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .car-category {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .car-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .car-item {
+            width: 30%;
+            margin-bottom: 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .car-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            transition: opacity 0.3s ease;
+        }
+
+        .car-item h2 {
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .car-item h2:hover {
+            color: #4CAF50;
+        }
+
+        .car-item h2.active {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .car-item.highlight {
+            background-color: #ffffcc;
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+	from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { 
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        #login:not(.hidden), #signup:not(.hidden) {
+            animation: slideDown 0.5s ease-out;
+        }
+
+        #login.fade-out, #signup.fade-out {
+            animation: fadeOut 0.5s ease-out;
+        }      footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .hidden {
+            display: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideDown {
+            from { 
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        
+        #login:not(.hidden), #signup:not(.hidden) {
+            animation: slideDown 0.5s ease-out;
+        }
+	  
+		 @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { 
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        #login:not(.hidden), #signup:not(.hidden) {
+            animation: slideDown 0.5s ease-out;
+        }
+
+        #login.fade-out, #signup.fade-out {
+            animation: fadeOut 0.5s ease-out;
+    </style>
+</head>
+<body>
+
+	     <section id="login" class="hidden">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <label for="login-email">Email:</label>
+                <input type="email" id="login-email" name="email" required>
+
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" name="password" required>
+
+                <button type="submit">Login</button>
+            </form>
+        </section>
+
+        <section id="signup" class="hidden">
+            <h2>Sign Up</h2>
+            <form id="signupForm">
+                <label for="signup-name">Full Name:</label>
+                <input type="text" id="signup-name" name="name" required>
+
+                <label for="signup-email">Email:</label>
+                <input type="email" id="signup-email" name="email" required>
+
+                <label for="signup-password">Password:</label>
+                <input type="password" id="signup-password" name="password" required>
+
+                <label for="signup-confirm-password">Confirm Password:</label>
+                <input type="password" id="signup-confirm-password" name="confirm-password" required>
+
+                <button type="submit">Sign Up</button>
+            </form>
+        </section>
+    <header>
+        <h1>Our Cars</h1>
+        <nav>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="our-cars.html" class="active">Our Cars</a></li>
+                <li><a href="About Us.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#" id="loginBtn">Login</a></li>
+                <li><a href="#" id="signupBtn">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search for cars..." oninput="searchCars()">
+            <button onclick="searchCars()">Search</button>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+
+         <h2>Economy Cars</h2>
+            <div class="car-list">
+                <div class="car-item" id="elantra">
+                    <img src="2024 Hyundai Elantra.png" alt="Car Image">
+                    <h2 data-image="2024 Hyundai Elantra.png" class="active">2024 Hyundai Elantra</h2>
+                    <h2 data-image="2024 Mazda3.png">2024 Mazda3</h2>
+                    <h2 data-image="Toyota Corolla.png">Toyota Corolla</h2>
+                    <h3>Compact Sedan</h3>
+                    <p>Fuel-efficient and perfect for city driving</p>
+                </div>
+                <div class="car-item" id="golf">
+                    <img src="Volkswagen Golf VIII.png" alt="Car Image">
+                    <h2 data-image="Volkswagen Golf VIII.png" class="active">Volkswagen Golf VIII</h2>
+                    <h2 data-image="Honda Civic.png">Honda Civic</h2>
+                    <h2 data-image="Ford Focus.png">Ford Focus</h2>
+                    <h3>Hatchback</h3>
+                    <p>Versatile and spacious for its size</p>
+                </div>
+                <div class="car-item" id="rio">
+                    <img src="2023_kia_rio_angularfront.jpg" alt="Car Image">
+                    <h2 data-image="2023_kia_rio_angularfront.jpg" class="active">2023 Kia Rio</h2>
+                    <h2 data-image="2024 Nissan Versa.jpg">2024 Nissan Versa</h2>
+                    <h2 data-image="Honda Fit.jpg">Honda Fit</h2>
+                    <h3>Subcompact</h3>
+                    <p>Easy to park and navigate in tight spaces</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="car-category">
+            <h2>SUV Cars</h2>
+            <div class="car-list">
+                <div class="car-item" id="sportage">
+                    <img src="2024 Kia Sportage.png" alt="Car Image">
+                    <h2 data-image="2024 Kia Sportage.png" class="active">2024 Kia Sportage</h2>
+                    <h2 data-image="2024 Hyundai Tucson.png">2024 Hyundai Tucson</h2>
+                    <h2 data-image="2024 Dodge Hornet.jpg">2024 Dodge Hornet</h2>
+                    <h3>Compact SUV</h3>
+                    <p>Perfect balance of efficiency and space</p>
+                </div>
+                <div class="car-item" id="cx90">
+                    <img src="2024 Mazda CX-90.png" alt="Car Image">
+                    <h2 data-image="2024 Mazda CX-90.png" class="active">2024 Mazda CX-90</h2>
+                    <h2 data-image="2024 Chevrolet Traverse.jpg">2024 Chevrolet Traverse</h2>
+                    <h2 data-image="2024 Chevrolet Blazer.jpg">2024 Chevrolet Blazer</h2>
+                    <h3>Midsize SUV</h3>
+                    <p>Ideal for family trips and outdoor adventures</p>
+                </div>
+                <div class="car-item" id="expedition">
+                    <img src="2024 Ford Expedition.png" alt="Car Image">
+                    <h2 data-image="2024 Ford Expedition.png" class="active">2024 Ford Expedition</h2>
+                    <h2 data-image="Cadillac Escalade.jpg">Cadillac Escalade</h2>
+                    <h2 data-image="2024 Lincoln Navigator.png">2024 Lincoln Navigator</h2>
+                    <h3>Full-size SUV</h3>
+                    <p>Maximum space and comfort for long journeys</p>
+                </div>
+        <!-- Luxury Cars Section -->
+        <section class="car-category">
+            <h2>Luxury Cars</h2>
+            <div class="car-list">
+                <div class="car-item" id="eclass">
+                    <img src="2024 Mercedes-Benz E-Class.png" alt="Car Image">
+                    <h2 data-image="2024 Mercedes-Benz E-Class.png" class="active">2024 Mercedes-Benz E-Class</h2>
+                    <h2 data-image="2024 Alfa Romeo Giulia.png">2024 Alfa Romeo Giulia</h2>
+                    <h2 data-image="Genesis G80.png">Genesis G80</h2>
+                    <h3>Luxury Sedan</h3>
+                    <p>Elegant design and superior comfort</p>
+                </div>
+                <div class="car-item" id="x7">
+                    <img src="2024 BMW X1.png" alt="Car Image">
+                    <h2 data-image="2024 BMW X1.png" class="active">2024 BMW X7</h2>
+                    <h2 data-image="Audi Q7.png">Audi Q7</h2>
+                    <h2 data-image="2024 Land Rover Range Rover.png">2024 Land Rover Range Rover</h2>
+                    <h3>Luxury SUV</h3>
+                    <p>Exquisite interiors and cutting-edge technology</p>
+                </div>
+                <div class="car-item" id="porsche911">
+                    <img src="Porsche 911.png" alt="Car Image">
+                    <h2 data-image="Porsche 911.png" class="active">2024 Porsche 911</h2>
+                    <h2 data-image="Chevrolet Corvette.png">Chevrolet Corvette</h2>
+                    <h2 data-image="Porsche 718 Cayman.png">Porsche 718 Cayman</h2>
+                    <h3>Sports Car</h3>
+                    <p>High performance and thrilling drives</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Car Rental Service &copy; 2024. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function searchCars() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const carItems = document.querySelectorAll('.car-item h2');
+            const searchResults = document.getElementById('searchResults');
+            searchResults.innerHTML = ''; // Clear previous search results
+            
+            if (searchInput === '') {
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            carItems.forEach(car => {
+                if (car.textContent.toLowerCase().includes(searchInput)) {
+                    const carId = car.closest('.car-item').id;
+                    const carLink = document.createElement('a');
+                    carLink.href = `#${carId}`;
+                    carLink.textContent = car.textContent;
+                    carLink.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        highlightCar(carId);
+                    });
+                    searchResults.appendChild(carLink);
+                }
+            });
+
+            if (searchResults.innerHTML === '') {
+                searchResults.style.display = 'none';
+            } else {
+                searchResults.style.display = 'block';
+            }
+        }
+
+        function highlightCar(carId) {
+            const carItem = document.getElementById(carId);
+            document.querySelectorAll('.car-item').forEach(item => {
+                item.classList.remove('highlight');
+            });
+            carItem.classList.add('highlight');
+            carItem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        document.querySelectorAll('.car-item h2').forEach(carHeading => {
+            carHeading.addEventListener('click', function() {
+                const carImage = this.getAttribute('data-image');
+                const carItem = this.closest('.car-item');
+                carItem.querySelector('img').src = carImage;
+                carItem.querySelectorAll('h2').forEach(h2 => h2.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+	// Show/hide login and signup forms
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const loginSection = document.getElementById('login');
+        const signupSection = document.getElementById('signup');
+
+        function toggleSection(sectionToToggle, sectionToHide) {
+            if (sectionToToggle.classList.contains('hidden')) {
+                // Show the section
+                sectionToToggle.classList.remove('hidden');
+                sectionToToggle.classList.remove('fade-out');
+                sectionToHide.classList.add('hidden');
+            } else {
+                // Hide the section with fade-out animation
+                sectionToToggle.classList.add('fade-out');
+                sectionToToggle.addEventListener('animationend', function() {
+                    sectionToToggle.classList.add('hidden');
+                    sectionToToggle.classList.remove('fade-out');
+                }, {once: true});
+            }
+        }
+
+        loginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleSection(loginSection, signupSection);
+        });
+
+        signupBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleSection(signupSection, loginSection);
+        });
+
+        // Form submission (for demonstration purposes)
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Login functionality would be implemented here.');
+        });
+
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Sign up functionality would be implemented here.');
+        });
+    </script>
+</body>
+</html>
