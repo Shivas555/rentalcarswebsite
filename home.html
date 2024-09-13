@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -345,7 +344,7 @@
         <label for="signup-confirm-password">Confirm Password:</label>
         <input type="password" id="signup-confirm-password" name="confirm_password" required>
 
-        <button id="submit" type="submit" name="save"value="submit">Sign Up</button>
+        <button type="submit" name="save"value="submit">Sign Up</button>
     </form>
 </section>
 
@@ -417,14 +416,21 @@
             }
         }
 
-        //inputs
-	 const email = document.getElementById('signup-email').value;
-	 const password = document.getElementById('signup-password').value;
-	 //submit button 
-	 const submit = document.getElementById('submit');
-	 submit.addEventListener("click", function (event) 
+        loginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleSection(loginSection, signupSection);
+        });
 
-     
+        signupBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleSection(signupSection, loginSection);
+        });
+
+        // Form submission (for demonstration purposes)
+        const loginForm = document.getElementById('login');
+        const signupForm = document.getElementById('signup');
+
+       
 
         // Animation for car driving across the screen
         window.addEventListener('load', () => {
@@ -513,28 +519,5 @@
 		
     
     </script>
-	<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyAo7DcINNQNMRsL9dnHEGd5s9rcjaUUDNM",
-    authDomain: "rental-cars-website.firebaseapp.com",
-    projectId: "rental-cars-website",
-    storageBucket: "rental-cars-website.appspot.com",
-    messagingSenderId: "1000624557983",
-    appId: "1:1000624557983:web:56c8cd1122bc8ccefeb7aa",
-    measurementId: "G-JZ3RN6S7VN"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
 </body>
 </html>
