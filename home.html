@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-analytics.js"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=2.0">
@@ -463,7 +465,20 @@
         alert('Error: ' + errorMessage);
       });
   });
+ // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAo7DcINNQNMRsL9dnHEGd5s9rcjaUUDNM",
+    authDomain: "rental-cars-website.firebaseapp.com",
+    projectId: "rental-cars-website",
+    storageBucket: "rental-cars-website.appspot.com",
+    messagingSenderId: "1000624557983",
+    appId: "1:1000624557983:web:56c8cd1122bc8ccefeb7aa",
+    measurementId: "G-JZ3RN6S7VN"
+  };
 
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const analytics = firebase.analytics(app);
         // Animation for car driving across the screen
         window.addEventListener('load', () => {
             const car = document.getElementById('animatedCar');
