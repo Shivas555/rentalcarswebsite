@@ -278,14 +278,9 @@
             </ul>
         </section>
     </main>
-
     <footer>
         <p>&copy; 2024 Car Rental Service. All rights reserved.</p>
     </footer>
-
-    <div id="chatbot-container" class="hidden">
-        <!-- Chatbot HTML will go here -->
-    </div>
 
     <script>
         // Firebase configuration
@@ -312,13 +307,31 @@
 
         // Toggle sections
         loginBtn.addEventListener('click', function() {
-            loginSection.classList.toggle('hidden');
-            signupSection.classList.add('hidden');
+            if (loginSection.classList.contains('hidden')) {
+                loginSection.classList.remove('hidden');
+                loginSection.classList.remove('fade-out');
+                loginSection.classList.add('animateUp');
+                signupSection.classList.add('fade-out');
+                setTimeout(() => {
+                    signupSection.classList.add('hidden');
+                    signupSection.classList.remove('animateUp');
+                    signupSection.classList.remove('fade-out');
+                }, 500); // Match this duration with animation time
+            }
         });
 
         signupBtn.addEventListener('click', function() {
-            signupSection.classList.toggle('hidden');
-            loginSection.classList.add('hidden');
+            if (signupSection.classList.contains('hidden')) {
+                signupSection.classList.remove('hidden');
+                signupSection.classList.remove('fade-out');
+                signupSection.classList.add('animateUp');
+                loginSection.classList.add('fade-out');
+                setTimeout(() => {
+                    loginSection.classList.add('hidden');
+                    loginSection.classList.remove('animateUp');
+                    loginSection.classList.remove('fade-out');
+                }, 500); // Match this duration with animation time
+            }
         });
 
         // Chatbot functionality
