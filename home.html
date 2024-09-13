@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js"></script>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=2.0">
     <title>Car Rental Service</title>
     <style>
-	
-        body {
+	  body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
@@ -335,7 +333,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/fireba
 
         <section id="signup" class="hidden">
     <h2>Sign Up</h2>
-    <form id="signupForm" action="signup.php" method="POST">
+    <form>
         <label for="signup-name">Full Name:</label>
         <input type="text" id="signup-name" name="name" required>
 
@@ -427,10 +425,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/fireba
 
         signupBtn.addEventListener('click', (e) => {
             e.preventDefault();
-			//inputs
-			const email = document.getelementbyid('email').value;
-			const password = document.getelementbyid('password').value;
             toggleSection(signupSection, loginSection);
+			//inputs
+			const email = document.getelementbyid('signup-email').value;
+			const password = document.getelementbyid('signup-password').value;
 			createUserWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed up 
@@ -441,7 +439,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/fireba
   .catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
-	alert(errormessage)
     // ..
   });
         });
