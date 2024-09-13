@@ -517,7 +517,29 @@
         // Initial bot message
         setTimeout(() => addMessage("Hello! How can I help you with our car rental service today?"), 1000);
 		
-    
+    const signupForm = document.getElementById('signupForm');
+
+signupForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const email = document.getElementById('signup-email').value;
+  const password = document.getElementById('signup-password').value;
+
+  // Use Firebase Authentication to create a new user
+  firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      // Signup successful, handle user or redirect
+      console.log('User signed up successfully!');
+      // ...
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // Handle errors (e.g., email already in use)
+      console.error(errorCode, errorMessage);
+      // ...
+    });
+});
     </script>
 </body>
 </html>
