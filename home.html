@@ -1,11 +1,16 @@
 <!DOCTYPE html>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=2.0">
     <title>Car Rental Service</title>
     <style>
-       body {
+	
+        body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
@@ -298,8 +303,6 @@
             animation: slideDown 0.5s ease forwards;
         }
     </style>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
 </head>
 <body>
     <header>
@@ -315,7 +318,7 @@
             </ul>
         </nav>
     </header>
-    <button id="chatbot-button">💬</button>
+ <button id="chatbot-button">💬</button>
     <div id="chatbot-container">
         <div id="chatbot-header">Chat with us</div>
         <div id="chatbot-messages"></div>
@@ -331,36 +334,38 @@
         </section>
 
         <section id="signup" class="hidden">
-            <h2>Sign Up</h2>
-            <form id="signupForm">
-                <label for="signup-name">Full Name:</label>
-                <input type="text" id="signup-name" name="name" required>
+    <h2>Sign Up</h2>
+    <form id="signupForm" action="signup.php" method="POST">
+        <label for="signup-name">Full Name:</label>
+        <input type="text" id="signup-name" name="name" required>
 
-                <label for="signup-email">Email:</label>
-                <input type="email" id="signup-email" name="email" required>
+        <label for="signup-email">Email:</label>
+        <input type="email" id="signup-email" name="email" required>
 
-                <label for="signup-password">Password:</label>
-                <input type="password" id="signup-password" name="password" required>
+        <label for="signup-password">Password:</label>
+        <input type="password" id="signup-password" name="password" required>
 
-                <label for="signup-confirm-password">Confirm Password:</label>
-                <input type="password" id="signup-confirm-password" name="confirm_password" required>
+        <label for="signup-confirm-password">Confirm Password:</label>
+        <input type="password" id="signup-confirm-password" name="confirm_password" required>
 
-                <button type="submit">Sign Up</button>
-            </form>
-        </section>
+        <button type="submit" name="save"value="submit">Sign Up</button>
+    </form>
+</section>
+
 
         <section id="login" class="hidden">
-            <h2>Login</h2>
-            <form id="loginForm">
-                <label for="login-email">Email:</label>
-                <input type="email" id="login-email" name="email" required>
+    <h2>Login</h2>
+    <form id="loginForm" action="login.php" method="POST">
+        <label for="login-email">Email:</label>
+        <input type="email" id="login-email" name="email" required>
 
-                <label for="login-password">Password:</label>
-                <input type="password" id="login-password" name="password" required>
+        <label for="login-password">Password:</label>
+        <input type="password" id="login-password" name="password" required>
 
-                <button type="submit">Login</button>
-            </form>
-        </section>
+        <button type="submit">Login</button>
+    </form>
+</section>
+
 
         <section id="cars">
             <h2>Our Cars</h2>
@@ -383,11 +388,16 @@
             </ul>
         </section>
     </main>
+
     <footer>
         <p>&copy; 2024 Car Rental Service. All rights reserved.</p>
     </footer>
 
-    <script>
+    <div id="animatedCar">
+        🚗
+    </div>
+
+ <script>
         // Show/hide login and signup forms
         const loginBtn = document.getElementById('loginBtn');
         const signupBtn = document.getElementById('signupBtn');
@@ -420,94 +430,151 @@
             toggleSection(signupSection, loginSection);
         });
 
-        // Form submission (for demonstration purposes)
-        const loginForm = document.getElementById('login');
-        const signupForm = document.getElementById('signup');
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "your-api-key",
-            authDomain: "your-project-id.firebaseapp.com",
-            projectId: "your-project-id",
-            storageBucket: "your-project-id.appspot.com",
-            messagingSenderId: "your-messaging-sender-id",
-            appId: "your-app-id",
-            measurementId: "your-measurement-id"
-        };
+      / Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAo7DcINNQNMRsL9dnHEGd5s9rcjaUUDNM",
+    authDomain: "rental-cars-website.firebaseapp.com",
+    projectId: "rental-cars-website",
+    storageBucket: "rental-cars-website.appspot.com",
+    messagingSenderId: "1000624557983",
+    appId: "1:1000624557983:web:56c8cd1122bc8ccefeb7aa",
+    measurementId: "G-JZ3RN6S7VN"
+  };
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const analytics = firebase.analytics(app);
+       
 
-        // Get elements
-        const loginBtn = document.getElementById('loginBtn');
-        const signupBtn = document.getElementById('signupBtn');
-        const loginSection = document.getElementById('login');
-        const signupSection = document.getElementById('signup');
+        // Animation for car driving across the screen
+        window.addEventListener('load', () => {
+            const car = document.getElementById('animatedCar');
+            setTimeout(() => {
+                car.style.left = '100%';
+            }, 500);
+        });
+ const auth = firebase.auth();
+
+  document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    auth.signInWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        alert('Login successful!');
+      })
+      .catch(error => {
+        alert('Error: ' + error.message);
+      });
+  });
+	 // Sign up form submission
+document.getElementById('signupForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = document.getElementById('signup-email').value;
+    var password = document.getElementById('signup-password').value;
+
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        alert('Signup successful!');
+      })
+      .catch((error) => {
+        alert('Error: ' + error.message);
+      });
+});
+
+// Login form submission
+document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = document.getElementById('login-email').value;
+    var password = document.getElementById('login-password').value;
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        alert('Login successful!');
+      })
+      .catch((error) => {
+        alert('Error: ' + error.message);
+      });
+});
+        // Highlight active page
+        const currentPage = window.location.hash || '#home';
+        document.querySelector(`nav a[href="${currentPage}"]`).classList.add('active');
+		 // Chatbot functionality
         const chatbotButton = document.getElementById('chatbot-button');
         const chatbotContainer = document.getElementById('chatbot-container');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotInput = document.getElementById('chatbot-message-input');
+        const chatbotSendButton = document.getElementById('chatbot-send-button');
 
-        // Toggle sections
-        loginBtn.addEventListener('click', function() {
-            if (loginSection.classList.contains('hidden')) {
-                loginSection.classList.remove('hidden');
-                loginSection.classList.remove('fade-out');
-                loginSection.classList.add('animateUp');
-                signupSection.classList.add('fade-out');
-                setTimeout(() => {
-                    signupSection.classList.add('hidden');
-                    signupSection.classList.remove('animateUp');
-                    signupSection.classList.remove('fade-out');
-                }, 500); // Match this duration with animation time
+        let isChatbotOpen = false;
+
+        chatbotButton.addEventListener('click', () => {
+            if (!isChatbotOpen) {
+                chatbotContainer.style.display = 'flex';
+                chatbotContainer.classList.remove('animateDown');
+                chatbotContainer.classList.add('animateUp');
+                isChatbotOpen = true;
+            } else {
+                chatbotContainer.classList.remove('animateUp');
+                chatbotContainer.classList.add('animateDown');
+                chatbotContainer.addEventListener('animationend', () => {
+                    if (!isChatbotOpen) {
+                        chatbotContainer.style.display = 'none';
+                    }
+                }, {once: true});
+                isChatbotOpen = false;
+            }
+        });
+        function addMessage(message, isUser = false) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            messageElement.style.marginBottom = '10px';
+            messageElement.style.padding = '5px 10px';
+            messageElement.style.borderRadius = '5px';
+            messageElement.style.maxWidth = '80%';
+            messageElement.style.alignSelf = isUser ? 'flex-end' : 'flex-start';
+            messageElement.style.backgroundColor = isUser ? '#e6f3ff' : '#f0f0f0';
+            chatbotMessages.appendChild(messageElement);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function handleUserMessage(message) {
+            addMessage(message, true);
+            // Simple bot response logic
+            let botResponse = "I'm sorry, I don't have an answer for that. Is there anything else I can help you with?";
+            if (message.toLowerCase().includes('hello') || message.toLowerCase().includes('hi')) {
+                botResponse = "Hello! How can I assist you with our car rental service today?";
+            } else if (message.toLowerCase().includes('car') && message.toLowerCase().includes('rent')) {
+                botResponse = "Great! We have a variety of cars available for rent. You can check our 'Our Cars' page for more information or ask me about specific types of vehicles.";
+            } else if (message.toLowerCase().includes('price') || message.toLowerCase().includes('cost')) {
+                botResponse = "Our rental prices vary depending on the car model and rental duration. Can you tell me which car you're interested in and for how long?";
+            }
+            setTimeout(() => addMessage(botResponse), 500);
+        }
+
+        chatbotSendButton.addEventListener('click', () => {
+            const message = chatbotInput.value.trim();
+            if (message) {
+                handleUserMessage(message);
+                chatbotInput.value = '';
             }
         });
 
-        signupBtn.addEventListener('click', function() {
-            if (signupSection.classList.contains('hidden')) {
-                signupSection.classList.remove('hidden');
-                signupSection.classList.remove('fade-out');
-                signupSection.classList.add('animateUp');
-                loginSection.classList.add('fade-out');
-                setTimeout(() => {
-                    loginSection.classList.add('hidden');
-                    loginSection.classList.remove('animateUp');
-                    loginSection.classList.remove('fade-out');
-                }, 500); // Match this duration with animation time
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const message = chatbotInput.value.trim();
+                if (message) {
+                    handleUserMessage(message);
+                    chatbotInput.value = '';
+                }
             }
         });
 
-        // Chatbot functionality
-        chatbotButton.addEventListener('click', function() {
-            chatbotContainer.classList.toggle('open');
-        });
-
-        // Handle Sign Up
-        document.getElementById('signupForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            var email = document.getElementById('signup-email').value;
-            var password = document.getElementById('signup-password').value;
-
-            firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    alert('Signup successful!');
-                })
-                .catch((error) => {
-                    alert('Error: ' + error.message);
-                });
-        });
-
-        // Handle Login
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            var email = document.getElementById('login-email').value;
-            var password = document.getElementById('login-password').value;
-
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    alert('Login successful!');
-                })
-                .catch((error) => {
-                    alert('Error: ' + error.message);
-                });
-        });
+        // Initial bot message
+        setTimeout(() => addMessage("Hello! How can I help you with our car rental service today?"), 1000);
+		
+    
     </script>
 </body>
 </html>
