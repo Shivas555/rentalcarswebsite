@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=2.0">
     <title>Our Cars Page</title>
     <style>
+        /* Existing CSS styles */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -282,7 +283,21 @@
     button:hover {
         background-color: #555;
     }
+    .car-item.rented img {
+        opacity: 0.5;
+    }
 
+    .car-item.rented h2 {
+        color: #999;
+    }
+    .car-item h2.rented {
+        color: #999;
+        pointer-events: none;
+    }
+
+    .car-item img.rented {
+        opacity: 0.5;
+    }
     </style>
 </head>
 <body>
@@ -292,7 +307,7 @@
         <h1>Our Cars</h1>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
+                <li><a href="home.html">Home</a></li>
                 <li><a href="our-cars.html"class="active">Our Cars</a></li>
                 <li><a href="About Us.html">About Us</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -437,11 +452,10 @@
     </footer>
 
     <script type="module">
-        
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
-
+    
         const firebaseConfig = {
             apiKey: "AIzaSyAo7DcINNQNMRsL9dnHEGd5s9rcjaUUDNM",
             authDomain: "rental-cars-website.firebaseapp.com",
@@ -451,11 +465,190 @@
             appId: "1:1000624557983:web:56c8cd1122bc8ccefeb7aa",
             measurementId: "G-JZ3RN6S7VN"
         };
-
+    
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const analytics = getAnalytics(app);
-
+    
+        let currentUser = null;
+    
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const loginSection = document.getElementById('login');
+        const signupSection = document.getElementById('signup');
+        const loginNav = document.getElementById('loginNav');
+        const signupNav = document.getElementById('signupNav');
+        const profileNav = document.getElementById('profileNav');
+        const logoutNav = document.getElementById('logoutNav');
+        const profilePic = document.getElementById('profilePic');
+        const logoutBtn = document.getElementById('logoutBtn');
+    
+        function toggleSection(sectionToToggle, sectionToHide) {
+            if (sectionToToggle.classList.contains('hidden')) {
+                sectionToToggle.classList.remove('hidden');
+                sectionToToggle.classList.remove('fade-out');
+                sectionToHide.classList.add('hidden');
+            } else {
+                sectionToToggle.classList.add('fade-out');
+                sectionToToggle.addEventListener('animationend', function() {
+                    sectionToToggle.classList.add('hidden');
+                    sectionToToggle.classList.remove('fade-out');
+                }, {once: true});
+            }
+        }
+    
+        loginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleSection(loginSection, signupSection);
+        });
+    
+        signupBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleSection(signupSection, loginSection);
+        });
+    
+        function updateUIForUser(user) {
+            currentUser = user;
+            if (user) {
+                loginNav.classList.add('hidden');
+                signupNav.classList.add('hidden');
+                profileNav.classList.remove('hidden');
+                logoutNav.classList.remove('hidden');
+            } else {
+                loginNav.classList.remove('hidden');
+                signupNav.classList.remove('hidden');
+                profileNav.classList.add('hidden');
+                logoutNav.classList.add('hidden');
+            }
+        }
+    
+        onAuthStateChanged(auth, (user) => {
+            updateUIForUser(user);
+        });
+    
+        document.querySelector('#signup form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("Account created successfully!");
+                    updateUIForUser(userCredential.user);
+                })
+                .catch((error) => {
+                    alert("Error: " + error.message);
+                });
+        });
+    
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("Login successful!");
+                    updateUIForUser(userCredential.user);
+                })
+                .catch((error) => {
+                    alert("Error: " + error.message);
+                });
+        });
+    
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            signOut(auth).then(() => {
+                alert("Logged out successfully!");
+                updateUIForUser(null);
+            }).catch((error) => {
+                alert("Error logging out: " + error.message);
+            });
+        });
+    
+        function searchCars() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const carItems = document.querySelectorAll('.car-item h2');
+            const searchResults = document.getElementById('searchResults');
+            searchResults.innerHTML = '';
+            
+            if (searchInput === '') {
+                searchResults.style.display = 'none';
+                return;
+            }
+    
+            carItems.forEach(car => {
+                if (car.textContent.toLowerCase().includes(searchInput)) {
+                    const carId = car.closest('.car-item').id;
+                    const carLink = document.createElement('a');
+                    carLink.href = `#${carId}`;
+                    carLink.textContent = car.textContent;
+                    carLink.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        highlightCar(carId);
+                    });
+                    searchResults.appendChild(carLink);
+                }
+            });
+    
+            searchResults.style.display = searchResults.innerHTML === '' ? 'none' : 'block';
+        }
+    
+        function highlightCar(carId) {
+            const carItem = document.getElementById(carId);
+            document.querySelectorAll('.car-item').forEach(item => {
+                item.classList.remove('highlight');
+            });
+            carItem.classList.add('highlight');
+            carItem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    
+        function handleCarClick(event) {
+            if (!currentUser) {
+                alert("Please log in to interact with cars.");
+                return;
+            }
+    
+            const carHeading = event.target;
+            const carItem = carHeading.closest('.car-item');
+            const carImg = carItem.querySelector('img');
+    
+            if (carHeading.classList.contains('rented')) {
+                alert("This car is already rented.");
+                return;
+            }
+    
+            if (carHeading.classList.contains('active')) {
+                if (confirm(`Do you want to rent the ${carHeading.textContent}?`)) {
+                    alert(`An email has been sent to ${currentUser.email} with pickup details for the ${carHeading.textContent}.`);
+                    
+                    // Mark only this specific car heading as rented
+                    carHeading.classList.add('rented');
+                    carHeading.style.color = '#999';
+                    carHeading.textContent += ' (Rented)';
+                    carHeading.style.pointerEvents = 'none';
+    
+                    // Adjust the opacity of the image only if this is the currently displayed car
+                    if (carImg.src === carHeading.getAttribute('data-image')) {
+                        carImg.style.opacity = '0.5';
+                    }
+                }
+            } else {
+                // Switch the image and set active state
+                carImg.src = carHeading.getAttribute('data-image');
+                carImg.style.opacity = carHeading.classList.contains('rented') ? '0.5' : '1';
+                carItem.querySelectorAll('h2').forEach(h2 => h2.classList.remove('active'));
+                carHeading.classList.add('active');
+            }
+        }
+    
+        document.querySelectorAll('.car-item h2').forEach(carHeading => {
+            carHeading.addEventListener('click', handleCarClick);
+        });
+    
+        document.getElementById('searchInput').addEventListener('input', searchCars);
+        document.querySelector('.search-bar button').addEventListener('click', searchCars);
+    </script>
+    </script>
+    <script>
         function searchCars() {
             const searchInput = document.getElementById('searchInput').value.toLowerCase();
             const carItems = document.querySelectorAll('.car-item h2');
@@ -487,7 +680,6 @@
                 searchResults.style.display = 'block';
             }
         }
-
         function highlightCar(carId) {
             const carItem = document.getElementById(carId);
             document.querySelectorAll('.car-item').forEach(item => {
@@ -506,104 +698,69 @@
                 this.classList.add('active');
             });
         });
-	  // Show/hide login and signup forms
-      const loginBtn = document.getElementById('loginBtn');
-        const signupBtn = document.getElementById('signupBtn');
-        const loginSection = document.getElementById('login');
-        const signupSection = document.getElementById('signup');
-        const loginNav = document.getElementById('loginNav');
-        const signupNav = document.getElementById('signupNav');
-        const profileNav = document.getElementById('profileNav');
-        const logoutNav = document.getElementById('logoutNav');
-        const profilePic = document.getElementById('profilePic');
-        const logoutBtn = document.getElementById('logoutBtn');
+        //renting car functionality
+        let currentUser = null;
 
-        function toggleSection(sectionToToggle, sectionToHide) {
-            if (sectionToToggle.classList.contains('hidden')) {
-                sectionToToggle.classList.remove('hidden');
-                sectionToToggle.classList.remove('fade-out');
-                sectionToHide.classList.add('hidden');
-            } else {
-                sectionToToggle.classList.add('fade-out');
-                sectionToToggle.addEventListener('animationend', function() {
-                    sectionToToggle.classList.add('hidden');
-                    sectionToToggle.classList.remove('fade-out');
-                }, {once: true});
-            }
+function updateUIForUser(user) {
+    currentUser = user;
+    if (user) {
+        loginNav.classList.add('hidden');
+        signupNav.classList.add('hidden');
+        profileNav.classList.remove('hidden');
+        logoutNav.classList.remove('hidden');
+    } else {
+        loginNav.classList.remove('hidden');
+        signupNav.classList.remove('hidden');
+        profileNav.classList.add('hidden');
+        logoutNav.classList.add('hidden');
+    }
+}
+
+function handleCarClick(event) {
+    event.preventDefault();
+    if (!currentUser) {
+        alert("Please log in to interact with cars.");
+        return;
+    }
+
+    const carHeading = event.target;
+    const carItem = carHeading.closest('.car-item');
+    const carImg = carItem.querySelector('img');
+
+    if (carItem.classList.contains('rented')) {
+        alert("This car is already rented.");
+        return;
+    }
+
+    if (carHeading.classList.contains('active')) {
+        // Car is already selected, prompt for rental
+        if (confirm(`Do you want to rent the ${carHeading.textContent}?`)) {
+            // Simulate sending an email
+            alert(`An email has been sent to ${currentUser.email} with pickup details for the ${carHeading.textContent}.`);
+            
+            // Mark the car as rented
+            carItem.classList.add('rented');
+            carImg.style.opacity = '0.5';
+            carHeading.textContent += ' (Rented)';
+            carHeading.style.pointerEvents = 'none';
         }
+    } else {
+        // Car is not selected, just switch the image
+        carImg.src = carHeading.getAttribute('data-image');
+        carItem.querySelectorAll('h2').forEach(h2 => h2.classList.remove('active'));
+        carHeading.classList.add('active');
+    }
+}
 
-        loginBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleSection(loginSection, signupSection);
-        });
+// Listen for auth state changes
+onAuthStateChanged(auth, (user) => {
+    updateUIForUser(user);
+});
 
-        signupBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleSection(signupSection, loginSection);
-        });
-
-        // Function to update UI based on auth state
-        function updateUIForUser(user) {
-            if (user) {
-                loginNav.classList.add('hidden');
-                signupNav.classList.add('hidden');
-                profileNav.classList.remove('hidden');
-                logoutNav.classList.remove('hidden');
-                // You can set a profile picture URL here if available
-                // profilePic.src = user.photoURL || 'default-profile.png';
-            } else {
-                loginNav.classList.remove('hidden');
-                signupNav.classList.remove('hidden');
-                profileNav.classList.add('hidden');
-                logoutNav.classList.add('hidden');
-            }
-        }
-
-        // Listen for auth state changes
-        onAuthStateChanged(auth, (user) => {
-            updateUIForUser(user);
-        });
-
-        // Signup functionality
-        document.querySelector('#signup form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    alert("Account created successfully!");
-                    updateUIForUser(userCredential.user);
-                })
-                .catch((error) => {
-                    alert("Error: " + error.message);
-                });
-        });
-
-        // Login functionality
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    alert("Login successful!");
-                    updateUIForUser(userCredential.user);
-                })
-                .catch((error) => {
-                    alert("Error: " + error.message);
-                });
-        });
-
-        // Logout functionality
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            signOut(auth).then(() => {
-                alert("Logged out successfully!");
-                updateUIForUser(null);
-            }).catch((error) => {
-                alert("Error logging out: " + error.message);
-            });
-        });
+// Add click event listeners to all car headings
+document.querySelectorAll('.car-item h2').forEach(carHeading => {
+    carHeading.addEventListener('click', handleCarClick);
+});
 
     </script>
 </body>
