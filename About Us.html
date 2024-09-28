@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=2.0">
 <title>About Us</title>
+<link rel="stylesheet" href="styles.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
 <style>
 	
@@ -14,6 +19,9 @@
             padding: 0;
             background-color: #f4f4f4;
             animation: fadeIn 1s ease-in;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 		 form {
             display: flex;
@@ -55,7 +63,7 @@
             background-color: #fff;
             margin-bottom: 20px;
             padding: 20px;
-            border-radius: 5px;
+            border-radius: none;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         h2 {
@@ -83,7 +91,8 @@
         button:hover {
             background-color: #555;
         }
-	    from { opacity: 0; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
             to { opacity: 1; }
         }
 
@@ -114,7 +123,7 @@
             color: #fff;
             text-align: center;
             padding: 1rem;
-            position: fixed;
+            position: column;
             bottom: 0;
             width: 100%;
         }
@@ -134,12 +143,13 @@
                 transform: translateY(0);
                 opacity: 1;
             }
-        
+        }
+
         #login:not(.hidden), #signup:not(.hidden) {
             animation: slideDown 0.5s ease-out;
         }
-	  
-		 @keyframes fadeIn {
+
+        @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
@@ -153,8 +163,8 @@
                 transform: translateY(0);
                 opacity: 1;
             
-        }
-
+        }   
+    }
         @keyframes fadeOut {
             from { opacity: 1; }
             to { opacity: 0; }
@@ -170,20 +180,34 @@
         padding: 20px;
         max-width: 1200px;
         margin: 0 auto;
+        }
+    }
+    #about-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
 	</style>
 <body>
 	<header>
-        <h1>About Us</h1>
+        <h1>About Our Car Rental Service</h1>
         <nav>
             <ul>
                 <li><a href="home.html">Home</a></li>
                 <li><a href="our-cars.html">Our Cars</a></li>
-                <li><a href="#about" class="active">About Us</a></li>
+                <li><a href="About Us.html" class="active">About Us</a></li>
                 <li><a href="#contact">Contact</a></li>
-                <li><a href="#" id="loginBtn">Login</a></li>
-                <li><a href="#" id="signupBtn">Sign Up</a></li>
+                <li id="loginNav"><a href="#" id="loginBtn">Login</a></li>
+                <li id="signupNav"><a href="#" id="signupBtn">Sign Up</a></li>
+                <li id="profileNav" class="hidden">
+                    <img id="profilePic" src="default-profile.png" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%;">
+                </li>
+                <li id="logoutNav" class="hidden"><a href="#" id="logoutBtn">Logout</a></li>
             </ul>
         </nav>
+        <div id="user-status"></div>
     </header>
 	
 	     <section id="login" class="hidden">
@@ -218,58 +242,149 @@
             </form>
         </section>
 		<main>
-		<h1>About Us Page</h1>
-
-<p>Welcome to [Your Company Name], your premier destination for hassle-free online rental bookings. Our mission is to connect travelers and locals with the best rental options available, ensuring a seamless experience from start to finish. Whether you’re looking for a cozy apartment, a luxurious villa, or a unique getaway, we’ve got you covered.</p>
-
+            <section id="about-content">
+                <h2>Our Story</h2>
+                <p>Founded in 2024, our car rental service has been providing top-quality vehicles and exceptional customer service to travelers and locals alike.</p>
+                
+                <h2>Our Mission</h2>
+                <p>We strive to make car rental easy, affordable, and enjoyable for everyone. Our mission is to provide reliable transportation solutions that enhance our customers' travel experiences.</p>
+                
+                <h2>Why Choose Us?</h2>
+                <ul>
+                    <li>Wide selection of well-maintained vehicles</li>
+                    <li>Competitive pricing and transparent fees</li>
+                    <li>Convenient online booking system</li>
+                    <li>24/7 customer support</li>
+                    <li>Flexible pickup and drop-off locations</li>
+                </ul>
+            </section>
 </main>	
-	<script>
-        // Show/hide login and signup forms
-        const loginBtn = document.getElementById('loginBtn');
-        const signupBtn = document.getElementById('signupBtn');
-        const loginSection = document.getElementById('login');
-        const signupSection = document.getElementById('signup');
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
 
-        function toggleSection(sectionToToggle, sectionToHide) {
-            if (sectionToToggle.classList.contains('hidden')) {
-                // Show the section
-                sectionToToggle.classList.remove('hidden');
+    const firebaseConfig = {
+        apiKey: "AIzaSyAo7DcINNQNMRsL9dnHEGd5s9rcjaUUDNM",
+        authDomain: "rental-cars-website.firebaseapp.com",
+        projectId: "rental-cars-website",
+        storageBucket: "rental-cars-website.appspot.com",
+        messagingSenderId: "1000624557983",
+        appId: "1:1000624557983:web:56c8cd1122bc8ccefeb7aa",
+        measurementId: "G-JZ3RN6S7VN"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const analytics = getAnalytics(app);
+
+    // Show/hide login and signup forms
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    const loginSection = document.getElementById('login');
+    const signupSection = document.getElementById('signup');
+    const loginNav = document.getElementById('loginNav');
+    const signupNav = document.getElementById('signupNav');
+    const profileNav = document.getElementById('profileNav');
+    const logoutNav = document.getElementById('logoutNav');
+    const profilePic = document.getElementById('profilePic');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    function toggleSection(sectionToToggle, sectionToHide) {
+        if (sectionToToggle.classList.contains('hidden')) {
+            sectionToToggle.classList.remove('hidden');
+            sectionToToggle.classList.remove('fade-out');
+            sectionToHide.classList.add('hidden');
+        } else {
+            sectionToToggle.classList.add('fade-out');
+            sectionToToggle.addEventListener('animationend', function() {
+                sectionToToggle.classList.add('hidden');
                 sectionToToggle.classList.remove('fade-out');
-                sectionToHide.classList.add('hidden');
-            } else {
-                // Hide the section with fade-out animation
-                sectionToToggle.classList.add('fade-out');
-                sectionToToggle.addEventListener('animationend', function() {
-                    sectionToToggle.classList.add('hidden');
-                    sectionToToggle.classList.remove('fade-out');
-                }, {once: true});
-            }
+            }, {once: true});
         }
+    }
 
-        loginBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleSection(loginSection, signupSection);
+    loginBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleSection(loginSection, signupSection);
+    });
+
+    signupBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleSection(signupSection, loginSection);
+    });
+
+    // Function to update UI based on auth state
+    function updateUIForUser(user) {
+        if (user) {
+            loginNav.classList.add('hidden');
+            signupNav.classList.add('hidden');
+            profileNav.classList.remove('hidden');
+            logoutNav.classList.remove('hidden');
+            // You can set a profile picture URL here if available
+            // profilePic.src = user.photoURL || 'default-profile.png';
+        } else {
+            loginNav.classList.remove('hidden');
+            signupNav.classList.remove('hidden');
+            profileNav.classList.add('hidden');
+            logoutNav.classList.add('hidden');
+        }
+    }
+
+    // Listen for auth state changes
+    onAuthStateChanged(auth, (user) => {
+        updateUIForUser(user);
+    });
+
+    // Signup functionality
+    document.querySelector('#signup form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                alert("Account created successfully!");
+                updateUIForUser(userCredential.user);
+            })
+            .catch((error) => {
+                alert("Error: " + error.message);
+            });
+    });
+
+    // Login functionality
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                alert("Login successful!");
+                updateUIForUser(userCredential.user);
+            })
+            .catch((error) => {
+                alert("Error: " + error.message);
+            });
+    });
+
+    // Logout functionality
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        signOut(auth).then(() => {
+            alert("Logged out successfully!");
+            updateUIForUser(null);
+        }).catch((error) => {
+            alert("Error logging out: " + error.message);
         });
+    });
 
-        signupBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleSection(signupSection, loginSection);
-        });
+   
 
-        // Form submission (for demonstration purposes)
-        const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
+    // Highlight active page
+    const currentPage = window.location.hash || '#home';
+    document.querySelector(`nav a[href="${currentPage}"]`).classList.add('active');
 
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Login functionality would be implemented here.');
-        });
-
-        signupForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Sign up functionality would be implemented here.');
-        });
-		 </script>
+   
+</script>
 </body>
  <footer>
         <p>&copy; 2024 Car Rental Service. All rights reserved.</p>
