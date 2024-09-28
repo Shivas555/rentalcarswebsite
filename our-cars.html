@@ -219,12 +219,13 @@
                 transform: translateY(0);
                 opacity: 1;
             }
-        
+        }
+
         #login:not(.hidden), #signup:not(.hidden) {
             animation: slideDown 0.5s ease-out;
         }
-	  
-		 @keyframes fadeIn {
+
+        @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
@@ -239,7 +240,7 @@
                 opacity: 1;
             
         }
-
+    }
         @keyframes fadeOut {
             from { opacity: 1; }
             to { opacity: 0; }
@@ -248,58 +249,95 @@
         #login:not(.hidden), #signup:not(.hidden) {
             animation: slideDown 0.5s ease-out;
         }
+        section {
+        background-color: #fff;
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: none;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
 
-        #login.fade-out, #signup.fade-out {
-            animation: fadeOut 0.5s ease-out;
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-top: 10px;
+    }
+
+    input {
+        padding: 5px;
+        margin-top: 5px;
+    }
+
+    button {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #555;
+    }
+
     </style>
 </head>
 <body>
 
-	     <section id="login" class="hidden">
-            <h2>Login</h2>
-            <form id="loginForm">
-                <label for="login-email">Email:</label>
-                <input type="email" id="login-email" name="email" required>
-
-                <label for="login-password">Password:</label>
-                <input type="password" id="login-password" name="password" required>
-
-                <button type="submit">Login</button>
-            </form>
-        </section>
-
-        <section id="signup" class="hidden">
-            <h2>Sign Up</h2>
-            <form id="signupForm">
-                <label for="signup-name">Full Name:</label>
-                <input type="text" id="signup-name" name="name" required>
-
-                <label for="signup-email">Email:</label>
-                <input type="email" id="signup-email" name="email" required>
-
-                <label for="signup-password">Password:</label>
-                <input type="password" id="signup-password" name="password" required>
-
-                <label for="signup-confirm-password">Confirm Password:</label>
-                <input type="password" id="signup-confirm-password" name="confirm-password" required>
-
-                <button type="submit">Sign Up</button>
-            </form>
-        </section>
+   
     <header>
         <h1>Our Cars</h1>
         <nav>
             <ul>
                 <li><a href="home.html">Home</a></li>
-                <li><a href="our-cars.html" class="active">Our Cars</a></li>
+                <li><a href="our-cars.html"class="active">Our Cars</a></li>
                 <li><a href="About Us.html">About Us</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="#" id="loginBtn">Login</a></li>
-                <li><a href="#" id="signupBtn">Sign Up</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li id="loginNav"><a href="#" id="loginBtn">Login</a></li>
+                <li id="signupNav"><a href="#" id="signupBtn">Sign Up</a></li>
+                <li id="profileNav" class="hidden">
+                    <img id="profilePic" src="default-profile.png" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%;">
+                </li>
+                <li id="logoutNav" class="hidden"><a href="#" id="logoutBtn">Logout</a></li>
             </ul>
         </nav>
     </header>
-
+    <section id="signup" class="hidden">
+        <h2>Sign Up</h2>
+        <form>
+            <label for="signup-name">Full Name:</label>
+            <input type="text" id="signup-name" name="name" required>
+    
+            <label for="signup-email">Email:</label>
+            <input type="email" id="signup-email" name="email" required>
+    
+            <label for="signup-password">Password:</label>
+            <input type="password" id="signup-password" name="password" required>
+    
+            <label for="signup-confirm-password">Confirm Password:</label>
+            <input type="password" id="signup-confirm-password" name="confirm_password" required>
+    
+            <button type="submit" name="save"value="submit">Sign Up</button>
+        </form>
+    </section>
+    
+    
+            <section id="login" class="hidden">
+        <h2>Login</h2>
+        <form id="loginForm" action="login.php" method="POST">
+            <label for="login-email">Email:</label>
+            <input type="email" id="login-email" name="email" required>
+    
+            <label for="login-password">Password:</label>
+            <input type="password" id="login-password" name="password" required>
+    
+            <button type="submit">Login</button>
+        </form>
+    </section>
     <main>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search for cars..." oninput="searchCars()">
@@ -399,7 +437,26 @@
         <p>Car Rental Service &copy; 2024. All Rights Reserved.</p>
     </footer>
 
-    <script>
+    <script type="module">
+        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAo7DcINNQNMRsL9dnHEGd5s9rcjaUUDNM",
+            authDomain: "rental-cars-website.firebaseapp.com",
+            projectId: "rental-cars-website",
+            storageBucket: "rental-cars-website.appspot.com",
+            messagingSenderId: "1000624557983",
+            appId: "1:1000624557983:web:56c8cd1122bc8ccefeb7aa",
+            measurementId: "G-JZ3RN6S7VN"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const analytics = getAnalytics(app);
+
         function searchCars() {
             const searchInput = document.getElementById('searchInput').value.toLowerCase();
             const carItems = document.querySelectorAll('.car-item h2');
@@ -450,20 +507,24 @@
                 this.classList.add('active');
             });
         });
-	// Show/hide login and signup forms
-        const loginBtn = document.getElementById('loginBtn');
+	  // Show/hide login and signup forms
+      const loginBtn = document.getElementById('loginBtn');
         const signupBtn = document.getElementById('signupBtn');
         const loginSection = document.getElementById('login');
         const signupSection = document.getElementById('signup');
+        const loginNav = document.getElementById('loginNav');
+        const signupNav = document.getElementById('signupNav');
+        const profileNav = document.getElementById('profileNav');
+        const logoutNav = document.getElementById('logoutNav');
+        const profilePic = document.getElementById('profilePic');
+        const logoutBtn = document.getElementById('logoutBtn');
 
         function toggleSection(sectionToToggle, sectionToHide) {
             if (sectionToToggle.classList.contains('hidden')) {
-                // Show the section
                 sectionToToggle.classList.remove('hidden');
                 sectionToToggle.classList.remove('fade-out');
                 sectionToHide.classList.add('hidden');
             } else {
-                // Hide the section with fade-out animation
                 sectionToToggle.classList.add('fade-out');
                 sectionToToggle.addEventListener('animationend', function() {
                     sectionToToggle.classList.add('hidden');
@@ -482,19 +543,69 @@
             toggleSection(signupSection, loginSection);
         });
 
-        // Form submission (for demonstration purposes)
-        const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
+        // Function to update UI based on auth state
+        function updateUIForUser(user) {
+            if (user) {
+                loginNav.classList.add('hidden');
+                signupNav.classList.add('hidden');
+                profileNav.classList.remove('hidden');
+                logoutNav.classList.remove('hidden');
+                // You can set a profile picture URL here if available
+                // profilePic.src = user.photoURL || 'default-profile.png';
+            } else {
+                loginNav.classList.remove('hidden');
+                signupNav.classList.remove('hidden');
+                profileNav.classList.add('hidden');
+                logoutNav.classList.add('hidden');
+            }
+        }
 
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Login functionality would be implemented here.');
+        // Listen for auth state changes
+        onAuthStateChanged(auth, (user) => {
+            updateUIForUser(user);
         });
 
-        signupForm.addEventListener('submit', (e) => {
+        // Signup functionality
+        document.querySelector('#signup form').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Sign up functionality would be implemented here.');
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("Account created successfully!");
+                    updateUIForUser(userCredential.user);
+                })
+                .catch((error) => {
+                    alert("Error: " + error.message);
+                });
         });
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("Login successful!");
+                    updateUIForUser(userCredential.user);
+                })
+                .catch((error) => {
+                    alert("Error: " + error.message);
+                });
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            signOut(auth).then(() => {
+                alert("Logged out successfully!");
+                updateUIForUser(null);
+            }).catch((error) => {
+                alert("Error logging out: " + error.message);
+            });
+        });
+
     </script>
 </body>
 </html>
