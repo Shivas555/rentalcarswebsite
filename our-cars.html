@@ -393,6 +393,7 @@ button:hover {
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
     
         const firebaseConfig = {
@@ -407,8 +408,10 @@ button:hover {
     
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app); // Initialize Firestore
         const analytics = getAnalytics(app);
     
+        // login and signup functionality
         let currentUser = null;
     
         const loginBtn = document.getElementById('loginBtn');
@@ -455,6 +458,7 @@ button:hover {
                 logoutNav.classList.remove('hidden');
                 loginSection.classList.add('hidden');
                 signupSection.classList.add('hidden');
+                loadRentedCars(user.uid); // Load rented cars for the user
             } else {
                 loginNav.classList.remove('hidden');
                 signupNav.classList.remove('hidden');
@@ -504,7 +508,7 @@ button:hover {
                 alert("Error logging out: " + error.message);
             });
         });
-
+    
         function searchCars() {
             const searchInput = document.getElementById('searchInput').value.toLowerCase();
             const carItems = document.querySelectorAll('.car-item h2');
@@ -515,7 +519,7 @@ button:hover {
                 searchResults.style.display = 'none';
                 return;
             }
-
+    
             carItems.forEach(car => {
                 if (car.textContent.toLowerCase().includes(searchInput)) {
                     const carId = car.closest('.car-item').id;
@@ -529,14 +533,14 @@ button:hover {
                     searchResults.appendChild(carLink);
                 }
             });
-
+    
             if (searchResults.innerHTML === '') {
                 searchResults.style.display = 'none';
             } else {
                 searchResults.style.display = 'block';
             }
         }
-
+    
         function highlightCar(carId) {
             const carItem = document.getElementById(carId);
             document.querySelectorAll('.car-item').forEach(item => {
@@ -545,22 +549,22 @@ button:hover {
             carItem.classList.add('highlight');
             carItem.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-
-        function handleCarClick(event) {
+    
+        async function handleCarClick(event) {
             if (!currentUser) {
                 alert("Please log in to interact with cars.");
                 return;
             }
-
+    
             const carHeading = event.target;
             const carItem = carHeading.closest('.car-item');
             const carImg = carItem.querySelector('img');
-
+    
             if (carHeading.classList.contains('rented')) {
                 alert("This car is already rented.");
                 return;
             }
-
+    
             if (carHeading.classList.contains('active')) {
                 if (confirm(`Do you want to rent the ${carHeading.textContent}?`)) {
                     alert(`An email has been sent to ${currentUser.email} with pickup details for the ${carHeading.textContent}.`);
@@ -569,9 +573,22 @@ button:hover {
                     carHeading.style.color = '#999';
                     carHeading.textContent += ' (Rented)';
                     carHeading.style.pointerEvents = 'none';
-
+    
                     if (carImg.src === carHeading.getAttribute('data-image')) {
                         carImg.style.opacity = '0.5';
+                    }
+    
+                    // Save rented car information to Firestore
+                    try {
+                        await setDoc(doc(db, "rentedCars", currentUser.uid), {
+                            carName: carHeading.textContent,
+                            carId: carItem.id,
+                            userEmail: currentUser.email,
+                            rentedAt: new Date().toISOString()
+                        });
+                        console.log("Car rental information saved to Firestore.");
+                    } catch (error) {
+                        console.error("Error saving car rental information: ", error);
                     }
                 }
             } else {
@@ -581,13 +598,47 @@ button:hover {
                 carHeading.classList.add('active');
             }
         }
-
+    
+        async function loadRentedCars(userId) {
+            try {
+                const docRef = doc(db, "rentedCars", userId);
+                const docSnap = await getDoc(docRef);
+    
+                if (docSnap.exists()) {
+                    const rentedCar = docSnap.data();
+                    const carItem = document.getElementById(rentedCar.carId);
+                    if (!carItem) {
+                        console.error(`Car item with ID ${rentedCar.carId} not found in the DOM.`);
+                        return;
+                    }
+                    const carHeading = carItem.querySelector('h2');
+                    const carImg = carItem.querySelector('img');
+    
+                    if (!carHeading) {
+                        console.error(`Car heading for ${rentedCar.carName} not found in the DOM.`);
+                        return;
+                    }
+    
+                    console.log(`Updating car: ${rentedCar.carName} (ID: ${rentedCar.carId})`);
+    
+                    carHeading.classList.add('rented');
+                    carHeading.style.color = '#999';
+                    carHeading.textContent = rentedCar.carName;
+                    carHeading.style.pointerEvents = 'none';
+                    carImg.style.opacity = '0.5';
+                } else {
+                    console.log("No rented car found for this user.");
+                }
+            } catch (error) {
+                console.error("Error loading rented car information: ", error);
+            }
+        }
+    
         document.querySelectorAll('.car-item h2').forEach(carHeading => {
             carHeading.addEventListener('click', handleCarClick);
         });
-
+    
         document.getElementById('searchInput').addEventListener('input', searchCars);
         document.querySelector('.search-bar button').addEventListener('click', searchCars);
     </script>
-</body>
 </html>
