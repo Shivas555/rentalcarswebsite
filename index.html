@@ -308,7 +308,7 @@
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="our-cars.html">Our Cars</a></li>
                 <li><a href="About Us.html">About Us</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="contact.html">Contact</a></li>
                 <li id="loginNav"><a href="#" id="loginBtn">Login</a></li>
                 <li id="signupNav"><a href="#" id="signupBtn">Sign Up</a></li>
                 <li id="profileNav" class="hidden">
@@ -442,6 +442,8 @@
             }
         }
 
+        let currentUser = null;
+
         loginBtn.addEventListener('click', (e) => {
             e.preventDefault();
             toggleSection(loginSection, signupSection);
@@ -454,13 +456,14 @@
 
         // Function to update UI based on auth state
         function updateUIForUser(user) {
+            currentUser = user;
             if (user) {
                 loginNav.classList.add('hidden');
                 signupNav.classList.add('hidden');
                 profileNav.classList.remove('hidden');
                 logoutNav.classList.remove('hidden');
-                // You can set a profile picture URL here if available
-                // profilePic.src = user.photoURL || 'default-profile.png';
+                loginSection.classList.add('hidden');
+                signupSection.classList.add('hidden');
             } else {
                 loginNav.classList.remove('hidden');
                 signupNav.classList.remove('hidden');
@@ -468,6 +471,7 @@
                 logoutNav.classList.add('hidden');
             }
         }
+    
 
         // Listen for auth state changes
         onAuthStateChanged(auth, (user) => {

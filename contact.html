@@ -118,12 +118,13 @@
 
         #login.fade-out, #signup.fade-out {
             animation: fadeOut 0.5s ease-out;
-        }      footer {
+        }      
+        footer {
             background-color: #333;
             color: #fff;
             text-align: center;
             padding: 1rem;
-            position: column;
+            position: fixed;
             bottom: 0;
             width: 100%;
         }
@@ -192,13 +193,13 @@
 	</style>
 <body>
 	<header>
-        <h1>About Our Car Rental Service</h1>
+        <h1>Ways to contact us</h1>
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="our-cars.html">Our Cars</a></li>
-                <li><a href="About Us.html" class="active">About Us</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="About Us.html">About Us</a></li>
+                <li><a href="contact.html"class="active">Contact</a></li>
                 <li id="loginNav"><a href="#" id="loginBtn">Login</a></li>
                 <li id="signupNav"><a href="#" id="signupBtn">Sign Up</a></li>
                 <li id="profileNav" class="hidden">
@@ -243,19 +244,12 @@
         </section>
 		<main>
             <section id="about-content">
-                <h2>Our Story</h2>
-                <p>Founded in 2024, our car rental service has been providing top-quality vehicles and exceptional customer service to travelers and locals alike.</p>
-                
-                <h2>Our Mission</h2>
-                <p>We strive to make car rental easy, affordable, and enjoyable for everyone. Our mission is to provide reliable transportation solutions that enhance our customers' travel experiences.</p>
-                
-                <h2>Why Choose Us?</h2>
+                <h2>Contact Us</h2>
+                <p>If you have any questions or need assistance, please contact us using the information below:</p>
                 <ul>
-                    <li>Wide selection of well-maintained vehicles</li>
-                    <li>Competitive pricing and transparent fees</li>
-                    <li>Convenient online booking system</li>
-                    <li>24/7 customer support</li>
-                    <li>Flexible pickup and drop-off locations</li>
+                    <li>Email: info@rentalcars.com</li>
+                    <li>Phone: +679 2760632</li>
+                    <li>Address: 1234 Car Rental Street, Lautoka, Fiji</li>
                 </ul>
             </section>
 </main>	
@@ -303,7 +297,7 @@
             }, {once: true});
         }
     }
-
+    
     let currentUser = null;
 
     loginBtn.addEventListener('click', (e) => {
