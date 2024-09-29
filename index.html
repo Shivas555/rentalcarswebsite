@@ -531,7 +531,10 @@
         const currentPage = window.location.hash || '#home';
         document.querySelector(`nav a[href="${currentPage}"]`).classList.add('active');
 
-        // Chatbot functionality
+        
+    </script>
+	<script>
+		// Chatbot functionality
         const chatbotButton = document.getElementById('chatbot-button');
         const chatbotContainer = document.getElementById('chatbot-container');
         const chatbotMessages = document.getElementById('chatbot-messages');
@@ -605,6 +608,6 @@
 
         // Initial bot message
         setTimeout(() => addMessage("Hello! How can I help you with our car rental service today?"), 1000);
-    </script>
+	</script>
 </body>
 </html>
