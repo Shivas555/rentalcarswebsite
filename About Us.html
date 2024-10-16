@@ -189,6 +189,46 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
+        #profileNav {
+    position: relative;
+    display: inline-block; /* Ensures the profile picture and dropdown are aligned */
+}
+
+#profileDropdown {
+    display: none;
+    position: absolute;
+    top: 100%; /* Position the dropdown directly below the profile picture */
+    left: 50%; /* Start positioning from the center */
+    transform: translateX(-50%); /* Center the dropdown horizontally */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 15px;
+    width: 200px;
+    transition: opacity 0.3s ease;
+}
+
+#profileDropdown p, #profileDropdown button {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+#profileDropdown button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#profileDropdown button:hover {
+    background-color: #0056b3;
+}
 	</style>
 <body>
 	<header>
@@ -203,8 +243,13 @@
                 <li id="signupNav"><a href="#" id="signupBtn">Sign Up</a></li>
                 <li id="profileNav" class="hidden">
                     <img id="profilePic" src="default-profile.jpg" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%;">
+                    <div id="profileDropdown" class="dropdown-content hidden">
+                        <p id="userEmail"></p>
+                        <button id="changeProfilePicBtn">Change Profile Picture</button>
+                        <input type="file" id="profilePicInput" accept="image/*" style="display: none;">
+                        <button id="logoutBtn">Logout</button>
+                    </div>
                 </li>
-                <li id="logoutNav" class="hidden"><a href="#" id="logoutBtn">Logout</a></li>
             </ul>
         </nav>
         <div id="user-status"></div>
@@ -322,14 +367,14 @@
             if (user) {
                 loginNav.classList.add('hidden');
                 signupNav.classList.add('hidden');
-                profileNav.classList.remove('hidden');
+                profilePic.classList.remove('hidden');
                 logoutNav.classList.remove('hidden');
                 loginSection.classList.add('hidden');
                 signupSection.classList.add('hidden');
             } else {
                 loginNav.classList.remove('hidden');
                 signupNav.classList.remove('hidden');
-                profileNav.classList.add('hidden');
+                profilePic.classList.add('hidden');
                 logoutNav.classList.add('hidden');
             }
         }
@@ -353,7 +398,7 @@
                 alert("Error: " + error.message);
             });
     });
-
+    
     // Login functionality
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -387,6 +432,51 @@
     document.querySelector(`nav a[href="${currentPage}"]`).classList.add('active');
 
    
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const profileNav = document.getElementById('profileNav');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const changeProfilePicBtn = document.getElementById('changeProfilePicBtn');
+        const profilePicInput = document.getElementById('profilePicInput');
+        const profilePic = document.getElementById('profilePic');
+        let hideTimeout;
+
+        // Show the dropdown
+        function showDropdown() {
+            clearTimeout(hideTimeout);
+            profileDropdown.style.display = 'block';
+        }
+
+        // Hide the dropdown after 3 seconds
+        function hideDropdown() {
+            hideTimeout = setTimeout(() => {
+                profileDropdown.style.display = 'none';
+            }, 3000);
+        }
+
+        // Event listeners for showing and hiding the dropdown
+        profileNav.addEventListener('mouseenter', showDropdown);
+        profileNav.addEventListener('mouseleave', hideDropdown);
+        profileDropdown.addEventListener('mouseenter', showDropdown);
+        profileDropdown.addEventListener('mouseleave', hideDropdown);
+
+        // Change Profile Picture
+        changeProfilePicBtn.addEventListener('click', () => {
+            profilePicInput.click();
+        });
+
+        profilePicInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    profilePic.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
 </script>
 </body>
  <footer>
