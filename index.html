@@ -3,16 +3,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=2.0">
     <title>Car Rental Service</title>
     <style>
-	  body {
+	    body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            animation: fadeIn 1s ease-in;
+            opacity: 1; /* Initially hide the body */
         }
         header {
             background-color: #333;
@@ -338,6 +339,28 @@
 #profileDropdown button:hover {
     background-color: #0056b3;
 }
+.spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border: 0.25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+    to {
+        transform: rotate(360deg);
+    }
+}
     </style>
 </head>
 <body>
@@ -400,7 +423,7 @@
 
         <section id="login" class="hidden">
     <h2>Login</h2>
-    <form id="loginForm" action="login.php" method="POST">
+    <form id="loginForm" method="POST">
         <label for="login-email">Email:</label>
         <input type="email" id="login-email" name="email" required>
 
@@ -410,7 +433,11 @@
         <button type="submit">Login</button>
     </form>
 </section>
-
+<div id="loadingSpinner" class="spinner hidden">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 
         <section id="cars">
             <h2>Our Cars</h2>
@@ -460,7 +487,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const analytics = getAnalytics(app);
-
+   
         // Show/hide login and signup forms
         const loginBtn = document.getElementById('loginBtn');
         const signupBtn = document.getElementById('signupBtn');
@@ -472,6 +499,10 @@
         const logoutNav = document.getElementById('logoutNav');
         const profilePic = document.getElementById('profilePic');
         const logoutBtn = document.getElementById('logoutBtn');
+        const signupForm = document.querySelector('#signup');
+        const loginForm = document.getElementById('loginForm');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const userEmailElement = document.getElementById('userEmail');
 
         function toggleSection(sectionToToggle, sectionToHide) {
             if (sectionToToggle.classList.contains('hidden')) {
@@ -508,10 +539,12 @@
             profilePic.classList.remove('hidden'); // Show profile nav
             loginSection.classList.add('hidden'); // Hide login section
             signupSection.classList.add('hidden'); // Hide signup section
+            userEmailElement.textContent = user.email; // Set user email in the dropdown
         } else {
             loginNav.classList.remove('hidden'); // Show login nav
             signupNav.classList.remove('hidden'); // Show signup nav
             profilePic.classList.add('hidden'); // Hide profile nav
+            userEmailElement.textContent = ''; // Clear user email in the dropdown
         }
     }
     
@@ -521,9 +554,12 @@
             updateUIForUser(user);
         });
 
-        // Signup functionality
-        document.querySelector('#signup form').addEventListener('submit', function(e) {
+        if (signupForm) {
+        // Sign-up spinner
+        signupForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            if (loadingSpinner) loadingSpinner.classList.remove('hidden');
+
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
             createUserWithEmailAndPassword(auth, email, password)
@@ -533,35 +569,89 @@
                 })
                 .catch((error) => {
                     alert("Error: " + error.message);
+                })
+                .finally(() => {
+                    if (loadingSpinner) loadingSpinner.classList.add('hidden');
                 });
         });
+    } else {
+        console.error('Signup form not found');
+    }
 
-        // Login functionality
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+    if (loginForm) {
+        // Login spinner
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            if (loadingSpinner) loadingSpinner.classList.remove('hidden');
+
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                console.log(' logged:', userCredential.user);
+                // Redirect to another page or update the UI
+            } catch (error) {
+                console.error('Error logging in:', error);
+                alert('Login failed: ' + error.message);
+            } finally {
+                if (loadingSpinner) loadingSpinner.classList.add('hidden');
+            }
+        });
+    } else {
+        console.error('Login form not found');
+    }
+
+    if (logoutBtn) {
+        // Logout function
+        logoutBtn.addEventListener('click', async () => {
+            if (loadingSpinner) loadingSpinner.classList.remove('hidden');
+
+            try {
+                await signOut(auth);
+                alert("Logged out successfully!");
+                // Redirect to login page or update the UI
+            } catch (error) {
+                console.error('Error logging out: ', error);
+                alert('Logout failed: ' + error.message);
+            } finally {
+                if (loadingSpinner) loadingSpinner.classList.add('hidden');
+            }
+        });
+    } else {
+        console.error('Logout button not found');
+    }
+    
+        function highlightCar(carId) {
+            const carItem = document.getElementById(carId);
+            document.querySelectorAll('.car-item').forEach(item => {
+                item.classList.remove('highlight');
+            });
+            carItem.classList.add('highlight');
+            carItem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      // Ensure the form exists before adding the event listener
+      const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input[name="email"]').value;
+            const password = event.target.querySelector('input[name="password"]').value;
             signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    alert("Login successful!");
-                    updateUIForUser(userCredential.user);
+                .then(userCredential => {
+                    // Signed in
+                    const user = userCredential.user;
+                    console.log('User signed in:', user);
                 })
-                .catch((error) => {
-                    alert("Error: " + error.message);
+                .catch(error => {
+                    console.error('Error logging in:', error);
+                    alert('Login failed: ' + error.message);
                 });
         });
+    } else {
+        console.error('Form not found');
+    }
 
-        // Logout functionality
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            signOut(auth).then(() => {
-                alert("Logged out successfully!");
-                updateUIForUser(null);
-            }).catch((error) => {
-                alert("Error logging out: " + error.message);
-            });
-        });
-           // Firebase authentication check
     
     
 
@@ -573,10 +663,12 @@
             }, 500);
         });
 
-        // Highlight active page
-        const currentPage = window.location.hash || '#home';
-        document.querySelector(`nav a[href="${currentPage}"]`).classList.add('active');
-
+    // Highlight active page
+    const currentPage = window.location.hash || '#home';
+    const activeLink = document.querySelector(`nav a[href="${currentPage}"]`);
+    if (activeLink) {
+        activeLink.classList.add('active');
+    }
         
     </script>
     <script>
