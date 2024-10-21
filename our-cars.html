@@ -419,7 +419,7 @@ body {
     <main>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search for cars..." oninput="searchCars()">
-            <button onclick="searchCars()">Search</button>
+            <button id="searchButton"onclick="searchCars()">Search</button>
             <div class="search-results" id="searchResults"></div>
         </div>
         <div id="loadingSpinner" class="spinner hidden">
@@ -429,44 +429,44 @@ body {
         </div>
         <h2>Economy Cars</h2>
         <div class="car-list">
-            <div class="car-item" id="elantra">
+            <div class="car-item" >
                 <img src="2024 Hyundai Elantra.png" alt="Car Image">
-                <h2 data-image="2024 Hyundai Elantra.png">2024 Hyundai Elantra</h2>
+                <h2 data-car="2024 Hyundai Elantra" data-image="2024 Hyundai Elantra.png">2024 Hyundai Elantra</h2>
                 <button class="reserve-btn" data-car="2024 Hyundai Elantra">Reserve</button>
                 <span class="reserved-text hidden">Reserved</span>
-                <h2 data-image="2024 Mazda3.png">2024 Mazda3</h2>
+                <h2 data-car="2024 Mazda3" data-image="2024 Mazda3.png">2024 Mazda3</h2>
                 <button class="reserve-btn" data-car="2024 Mazda3">Reserve</button>
                 <span class="reserved-text hidden">Reserved</span>
-                <h2 data-image="Toyota Corolla.png">Toyota Corolla</h2>
+                <h2 data-car="Toyota Corolla" data-image="Toyota Corolla.png">Toyota Corolla</h2>
                 <button class="reserve-btn" data-car="Toyota Corolla">Reserve</button>
                 <span class="reserved-text hidden">Reserved</span>
                 <h3>Compact Sedan</h3>
                 <p>Fuel-efficient and perfect for city driving</p>
             </div>
-            <div class="car-item" id="golf">
+            <div class="car-item" >
                 <img src="Volkswagen Golf VIII.png" alt="Car Image">
-                <h2 data-image="Volkswagen Golf VIII.png">Volkswagen Golf VIII</h2>
+                <h2 data-car="Volkswagen Golf VIII" data-image="Volkswagen Golf VIII.png">Volkswagen Golf VIII</h2>
                 <button class="reserve-btn" data-car="Volkswagen Golf VIII">Reserve</button>
                 <span class="reserved-text hidden">Reserved</span>
-                <h2 data-image="Honda Civic.png">Honda Civic</h2>
+                <h2 data-car="Honda Civic" data-image="Honda Civic.png">Honda Civic</h2>
                 <button class="reserve-btn" data-car="Honda Civic">Reserve</button>
                 <span class="reserved-text hidden">Reserved</span>
-                <h2 data-image="Ford Focus.png">Ford Focus</h2>
+                <h2 data-car="Ford Focus" data-image="Ford Focus.png">Ford Focus</h2>
                 <button class="reserve-btn" data-car="Ford Focus">Reserve</button>
                 <span class="reserved-text hidden">Reserved</span>
                 <h3>Hatchback</h3>
                 <p>Versatile and spacious for its size</p>
             </div>
-            <div class="car-item" data-car-id="rio">
+            <div class="car-item" >
                         <img src="2023_kia_rio_angularfront.jpg" alt="Car Image">
-                        <h2 data-image="2023_kia_rio_angularfront.jpg">2023 Kia Rio</h2>
-                        <button class="reserve-btn" data-car-id="rio">Reserve</button>
+                        <h2 data-car="2023 kia Rio Angularfront" data-image="2023_kia_rio_angularfront.jpg">2023 Kia Rio</h2>
+                        <button class="reserve-btn" data-car="2023 kia Rio Angularfront">Reserve</button>
                         <span class="reserved-text hidden">Reserved</span>
-                        <h2 data-image="2024 Nissan Versa.jpg">2024 Nissan Versa</h2>
-                        <button class="reserve-btn" data-car-id="versa">Reserve</button>
+                        <h2 data-car="2024 Nissan Versa" data-image="2024 Nissan Versa.jpg">2024 Nissan Versa</h2>
+                        <button class="reserve-btn" data-car="2024 Nissan Versa">Reserve</button>
                         <span class="reserved-text hidden">Reserved</span>
-                        <h2 data-image="Honda Fit.jpg">Honda Fit</h2>
-                        <button class="reserve-btn" data-car-id="fit">Reserve</button>
+                        <h2 data-car="Honda Fit" data-image="Honda Fit.jpg">Honda Fit</h2>
+                        <button class="reserve-btn" data-car="Honda Fit">Reserve</button>
                         <span class="reserved-text hidden">Reserved</span>
                         <h3>Subcompact</h3>
                         <p>Easy to park and navigate in tight spaces</p>
@@ -477,44 +477,44 @@ body {
                 <section class="car-category">
                     <h2>SUV Cars</h2>
                     <div class="car-list">
-                        <div class="car-item" data-car-id="sportage">
+                        <div class="car-item">
                             <img src="2024 Kia Sportage.png" alt="Car Image">
-                            <h2 data-image="2024 Kia Sportage.png">2024 Kia Sportage</h2>
-                            <button class="reserve-btn" data-car-id="sportage">Reserve</button>
+                            <h2 data-car="2024 Kia Sportage" data-image="2024 Kia Sportage.png">2024 Kia Sportage</h2>
+                            <button class="reserve-btn" data-car="2024 Kia Sportage">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
-                            <h2 data-image="2024 Hyundai Tucson.png">2024 Hyundai Tucson</h2>
-                            <button class="reserve-btn" data-car-id="tucson">Reserve</button>
+                            <h2 data-car="2024 Hyundai Tucson" data-image="2024 Hyundai Tucson.png">2024 Hyundai Tucson</h2>
+                            <button class="reserve-btn" data-car="2024 Hyundai Tucson">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
-                            <h2 data-image="2024 Dodge Hornet.jpg">2024 Dodge Hornet</h2>
-                            <button class="reserve-btn" data-car-id="hornet">Reserve</button>
+                            <h2 data-car="2024 Dodge Hornet" data-image="2024 Dodge Hornet.jpg">2024 Dodge Hornet</h2>
+                            <button class="reserve-btn" data-car="2024 Dodge Hornet">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
                             <h3>Compact SUV</h3>
                             <p>Perfect balance of efficiency and space</p>
                         </div>
-                        <div class="car-item" data-car-id="cx90">
+                        <div class="car-item" >
                             <img src="2024 Mazda CX-90.png" alt="Car Image">
-                            <h2 data-image="2024 Mazda CX-90.png">2024 Mazda CX-90</h2>
-                            <button class="reserve-btn" data-car-id="cx90">Reserve</button>
+                            <h2 data-car="2024 Mazda CX-90" data-image="2024 Mazda CX-90.png">2024 Mazda CX-90</h2>
+                            <button class="reserve-btn" data-car="2024 Mazda CX-90">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
-                            <h2 data-image="2024 Chevrolet Traverse.jpg">2024 Chevrolet Traverse</h2>
-                            <button class="reserve-btn" data-car-id="traverse">Reserve</button>
+                            <h2 data-car="2024 Chevrolet Traverse" data-image="2024 Chevrolet Traverse.jpg">2024 Chevrolet Traverse</h2>
+                            <button class="reserve-btn" data-car="2024 Chevrolet Traverse">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
-                            <h2 data-image="2024 Chevrolet Blazer.jpg">2024 Chevrolet Blazer</h2>
-                            <button class="reserve-btn" data-car-id="blazer">Reserve</button>
+                            <h2 data-car="2024 Chevrolet Blazer" data-image="2024 Chevrolet Blazer.jpg">2024 Chevrolet Blazer</h2>
+                            <button class="reserve-btn" data-car="2024 Chevrolet Blazer">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
                             <h3>Midsize SUV</h3>
                             <p>Ideal for family trips and outdoor adventures</p>
                         </div>
-                        <div class="car-item" data-car-id="expedition">
+                        <div class="car-item">
                             <img src="2024 Ford Expedition.png" alt="Car Image">
-                            <h2 data-image="2024 Ford Expedition.png">2024 Ford Expedition</h2>
-                            <button class="reserve-btn" data-car-id="expedition">Reserve</button>
+                            <h2 data-car="2024 Ford Expedition" data-image="2024 Ford Expedition.png">2024 Ford Expedition</h2>
+                            <button class="reserve-btn" data-car="2024 Ford Expedition">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
-                            <h2 data-image="Cadillac Escalade.jpg">Cadillac Escalade</h2>
-                            <button class="reserve-btn" data-car-id="escalade">Reserve</button>
+                            <h2 data-car="Cadillac Escalade" data-image="Cadillac Escalade.jpg">Cadillac Escalade</h2>
+                            <button class="reserve-btn" data-car="Cadillac Escalade">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
-                            <h2 data-image="2024 Lincoln Navigator.png">2024 Lincoln Navigator</h2>
-                            <button class="reserve-btn" data-car-id="navigator">Reserve</button>
+                            <h2 data-car="2024 Lincoln Navigator" data-image="2024 Lincoln Navigator.png">2024 Lincoln Navigator</h2>
+                            <button class="reserve-btn" data-car="2024 Lincoln Navigator">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
                             <h3>Full-size SUV</h3>
                             <p>Maximum space and comfort for long journeys</p>
@@ -525,44 +525,46 @@ body {
                 <section class="car-category">
                     <h2>Luxury Cars</h2>
                     <div class="car-list">
-                        <div class="car-item" data-car-id="eclass">
+                        <div class="car-item">
                             <img src="2024 Mercedes-Benz E-Class.png" alt="Car Image">
-                            <h2 data-image="2024 Mercedes-Benz E-Class.png">Mercedes-Benz E-Class</h2>
-                            <button class="reserve-btn" data-car-id="eclass">Reserve</button>
+                            <h2 data-car="Mercedes-Benz E-Class" data-image="2024 Mercedes-Benz E-Class.png">Mercedes-Benz E-Class</h2>
+                            <button class="reserve-btn" data-car="Mercedes-Benz E-Class">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
-                            <h2 data-image="2024 Alfa Romeo Giulia.png">2024 Alfa Romeo Giulia</h2>
-                            <button class="reserve-btn" data-car-id="giulia">Reserve</button>
+                            <h2 data-car="2024 Alfa Romeo Giulia" data-image="2024 Alfa Romeo Giulia.png">2024 Alfa Romeo Giulia</h2>
+                            <button class="reserve-btn" data-car="2024 Alfa Romeo Giulia">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
-                            <h2 data-image="Genesis G80.png">Genesis G80</h2>
-                            <button class="reserve-btn" data-car-id="g80">Reserve</button>
+                            <h2 data-car="Genesis G80" data-image="Genesis G80.png">Genesis G80</h2>
+                            <button class="reserve-btn" data-car="Genesis G80">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
+
                             <h3>Luxury Sedan</h3>
                             <p>Elegant design and superior comfort</p>
                         </div>
-                        <div class="car-item" data-car-id="x7">
+                        <div class="car-item">
                             <img src="2024 BMW X1.png" alt="Car Image">
-                            <h2 data-image="2024 BMW X1.png">2024 BMW X7</h2>
-                            <button class="reserve-btn" data-car-id="x7">Reserve</button>
+                            <h2 data-car="2024 BMW X7" data-image="2024 BMW X1.png">2024 BMW X7</h2>
+                            <button class="reserve-btn" data-car="2024 BMW X7">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
-                            <h2 data-image="Audi Q7.png">Audi Q7</h2>
-                            <button class="reserve-btn" data-car-id="q7">Reserve</button>
+                            <h2 data-car="Audi Q7" data-image="Audi Q7.png">Audi Q7</h2>
+                            <button class="reserve-btn" data-car="Audi Q7">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
-                            <h2 data-image="2024 Land Rover Range Rover.png">Land Rover Range Rover</h2>
-                            <button class="reserve-btn" data-car-id="rangerover">Reserve</button>
+                            <h2 data-car="Land Rover Range Rover" data-image="2024 Land Rover Range Rover.png">Land Rover Range Rover</h2>
+                            <button class="reserve-btn" data-car="Land Rover Range Rover">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
+
                             <h3>Luxury SUV</h3>
                             <p>Exquisite interiors and cutting-edge technology</p>
                         </div>
-                        <div class="car-item" data-car-id="porsche911">
+                        <div class="car-item">
                             <img src="Porsche 911.png" alt="Car Image">
-                            <h2 data-image="Porsche 911.png">2024 Porsche 911</h2>
-                            <button class="reserve-btn" data-car-id="porsche911">Reserve</button>
+                            <h2 data-car="2024 Porsche 911" data-image="Porsche 911.png">2024 Porsche 911</h2>
+                            <button class="reserve-btn" data-car="2024 Porsche 911">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
-                            <h2 data-image="Chevrolet Corvette.png">Chevrolet Corvette</h2>
-                            <button class="reserve-btn" data-car-id="corvette">Reserve</button>
+                            <h2 data-car="Chevrolet Corvette" data-image="Chevrolet Corvette.png">Chevrolet Corvette</h2>
+                            <button class="reserve-btn" data-car="Chevrolet Corvette">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
-                            <h2 data-image="Porsche 718 Cayman.png">Porsche 718 Cayman</h2>
-                            <button class="reserve-btn" data-car-id="cayman">Reserve</button>
+                            <h2 data-car="Porsche 718 Cayman" data-image="Porsche 718 Cayman.png">Porsche 718 Cayman</h2>
+                            <button class="reserve-btn" data-car="Porsche 718 Cayman">Reserve</button>
                             <span class="reserved-text hidden">Reserved</span>
                             <h3>Sports Car</h3>
                             <p>High performance and thrilling drives</p>
@@ -584,7 +586,7 @@ body {
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDocs, collection, updateDoc, query, where, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDocs, collection, updateDoc, query, where,  deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
 
         const firebaseConfig = {
@@ -601,11 +603,14 @@ body {
         const auth = getAuth(app);
         const db = getFirestore(app); // Initialize Firestore
         const analytics = getAnalytics(app);
+        
+
         function searchCars() {
             const searchInputValue = document.getElementById('searchInput').value.toLowerCase();
             const carItems = document.querySelectorAll('.car-item');
             const searchResults = document.getElementById('searchResults');
             searchResults.innerHTML = ''; // Clear previous search results
+            
 
             carItems.forEach(item => {
                 const carName = item.querySelector('h2').textContent.toLowerCase();
@@ -753,7 +758,7 @@ body {
     }
     
         function highlightCar(carId) {
-            const carItem = document.getElementById(carId);
+            const carItem = document.getElementById(data-car);
             document.querySelectorAll('.car-item').forEach(item => {
                 item.classList.remove('highlight');
             });
@@ -794,19 +799,7 @@ body {
             }
 
             
- // Function to update car status in the database
- async function updateCarStatus(carId, status) {
-        const carDoc = doc(db, 'cars', carId);
-        const carSnapshot = await getDoc(carDoc);
-        await updateDoc(carDoc, { status });
 
-        if (carSnapshot.exists()) {
-            await updateDoc(carDoc, { status });
-        } else {
-            // Create the car document if it does not exist
-            await setDoc(carDoc, { status });
-        }
-    }
 
     // Function to load car statuses from the database
     async function loadCarStatuses() {
@@ -841,68 +834,6 @@ body {
         }
     });
 });
-
-
-    // Handle car click event
-    async function handleCarClick(event) {
-        if (!auth.currentUser) {
-            alert("Please log in to interact with cars.");
-            return;
-        }
-
-        const carHeading = event.target;
-        const carItem = carHeading.closest('.car-item');
-        const carId = carItem.id;
-
-        if (carHeading.classList.contains('rented')) {
-            alert("This car is already rented.");
-            return;
-        }
-
-        if (carHeading.classList.contains('active')) {
-            const confirmation = confirm(`Do you want to rent the ${carHeading.textContent}?`);
-            if (!confirmation) {
-                return;
-            }
-
-            try {
-                await updateCarStatus(carId, 'rented');
-                carHeading.classList.add('rented');
-                carHeading.classList.add('disabled');
-                carHeading.textContent += ' (rented)';
-                const reserveButton = carItem.querySelector('.reserve-btn');
-                if (reserveButton) {
-                    reserveButton.disabled = true;
-                }
-                alert('Car rented successfully!');
-
-                // Save rented car information to Firestore
-                const currentUser = auth.currentUser;
-                await setDoc(doc(db, "rentedCars", `${currentUser.uid}_${carId}`), {
-                    carName: carHeading.textContent,
-                    carId: carItem.id,
-                    userEmail: currentUser.email,
-                    rentedAt: new Date().toISOString()
-                });
-                console.log("Car rental information saved to Firestore.");
-            } catch (error) {
-                console.error('Error renting car: ', error);
-                alert('Failed to rent car. Please try again.');
-            }
-        } else {
-            // Remove active class from all headings
-            document.querySelectorAll('.car-item h2').forEach(heading => {
-                heading.classList.remove('active');
-            });
-
-            // Add active class to the clicked heading
-            carHeading.classList.add('active');
-
-            // Change the image to the one specified in the data-image attribute
-            const carImg = carItem.querySelector('img');
-            carImg.src = carHeading.dataset.image; // Use the data-image attribute
-        }
-    }
 
     // Add event listener to car headings
     document.querySelectorAll('.car-item h2').forEach(carHeading => {
@@ -1094,11 +1025,11 @@ document.addEventListener('DOMContentLoaded', () => {
         profileDropdown.style.display = 'block';
     }
 
-    // Hide the dropdown after 1 second
+    // Hide the dropdown after 2 second
     function hideDropdown() {
         hideTimeout = setTimeout(() => {
             profileDropdown.style.display = 'none';
-        }, 1000);
+        }, 2000);
     }
 
     // Add event listeners for dropdown
@@ -1161,34 +1092,91 @@ async function userHasRentedCar(userId) {
 }
 
 // (new code) Update rent car logic
-async function rentCar(event) {
-    const carId = event.target.dataset.carId;
-    const userId = auth.currentUser.uid;
+async function handleCarClick(event) {
+        if (!auth.currentUser) {
+            alert("Please log in to interact with cars.");
+            return;
+        }
 
-    if (await userHasRentedCar(userId)) {
-        alert('You can only rent one car at a time.');
-        return;
+        const carHeading = event.target;
+        const carItem = carHeading.closest('.car-item');
+        const carId = carItem.id;
+
+        if (carHeading.classList.contains('rented')) {
+            alert("This car is already rented.");
+            return;
+        }
+
+        if (carHeading.classList.contains('active')) {
+            const confirmation = confirm(`Do you want to rent the ${carHeading.textContent}?`);
+            if (!confirmation) {
+                return;
+            }
+
+            try {
+                carHeading.classList.add('rented');
+                carHeading.classList.add('disabled');
+                carHeading.textContent += ' (rented)';
+                const reserveButton = carItem.querySelector('.reserve-btn');
+                if (reserveButton) {
+                    reserveButton.disabled = true;
+                }
+                alert('Car rented successfully!');
+
+                // Save rented car information to Firestore
+                const currentUser = auth.currentUser;
+                const carId = carHeading.getAttribute('data-car');
+                await setDoc(doc(db, "rentedCars", `${currentUser.uid}_${carId}`), {
+                    carName: carHeading.textContent,
+                    carId: carId,
+                    userEmail: currentUser.email,
+                    rentedAt: new Date().toISOString()
+                });
+                console.log("Car rental information saved to Firestore.");
+            } catch (error) {
+                console.error("Error saving car rental information: ", error);
+            }
+        } else {
+            // Remove active class from all headings
+            document.querySelectorAll('.car-item h2').forEach(heading => {
+                heading.classList.remove('active');
+            });
+
+            // Add active class to the clicked heading
+            carHeading.classList.add('active');
+
+            // Change the image to the one specified in the data-image attribute
+            const carImg = carItem.querySelector('img');
+            carImg.src = carHeading.dataset.image; // Use the data-image attribute
+        }
     }
 
-    try {
-        // Create a rented car document
-        await setDoc(doc(db, 'rentedCars', `${userId}_${carId}`), {
-            userId: userId,
-            carId: carId,
-            rentedAt: new Date()
+    document.addEventListener('DOMContentLoaded', () => {
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                fetchRentedCars();
+                document.querySelectorAll('.car-item h2').forEach(carHeading => {
+                    carHeading.addEventListener('click', handleCarClick);
+                });
+            }
         });
+    });
 
-        // Update the car status to 'rented'
-        await updateDoc(doc(db, 'cars', carId), { status: 'rented' });
-
-        alert('Car rented successfully!');
-        // Reload car statuses to update the UI
-        loadRentedCars();
-    } catch (error) {
-        console.error('Error renting car: ', error);
-        alert('Failed to rent car. Please try again.');
+        async function fetchRentedCars() {
+        try {
+            const rentedCarsSnapshot = await getDocs(collection(db, 'rentedCars'));
+            rentedCarsSnapshot.forEach(doc => {
+                const rentedCar = doc.data();
+                const carHeading = document.querySelector(`h2[data-car="${rentedCar.carId}"]`);
+                if (carHeading && !carHeading.classList.contains('rented')) {
+                    carHeading.classList.add('rented');
+                    carHeading.textContent += ' (rented)';
+                }
+            });
+        } catch (error) {
+            console.error('Error loading rented cars: ', error);
+        }
     }
-}
     </script>
 </body>
 </html>
