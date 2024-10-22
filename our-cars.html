@@ -53,47 +53,53 @@
         }
 
         .search-bar {
-            text-align: center;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .search-bar input[type="text"] {
-            padding: 10px;
-            width: 300px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+.search-bar input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+}
+    .search-bar input[type="text"] {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 10px;
+        width: 300px;
+    }
 
         .search-bar button {
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: #fff;
-            cursor: pointer;
-        }
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      
+        cursor: pointer;
+        margin-right: 10px;
+    }
 
         .search-bar button:hover {
             background-color: #45a049;
         }
 
         .search-results {
-            text-align: left;
-            margin-top: 5px;
-            max-height: 150px;
-            overflow-y: auto;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            position: absolute;
-            width: 300px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-        }
+        position: absolute;
+        top: 50px;
+        width: 100%;
+        max-width: 300px;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
 
         .search-results a {
             display: block;
@@ -111,15 +117,17 @@
             background-color: #f1f1f1;
         }
 
-       .search-result-item {
+        .search-result-item {
         padding: 10px;
         margin: 5px 0;
         background-color: #f0f0f0;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        border-bottom: 1px solid #ccc;
         cursor: pointer;
         transition: background-color 0.3s;
+        font-size: 16px; /* Make the text smaller */
+        font-weight: normal; /* Remove bold styling */
     }
+
 
         .car-category {
             background-color: #fff;
@@ -359,6 +367,10 @@ body {
         transform: rotate(360deg);
     }
 }
+.highlight {
+        background-color: yellow; /* Highlight color */
+        transition: background-color 0.3s ease; /* Smooth transition */
+    }
     </style>
 </head>
 <body>
@@ -418,8 +430,8 @@ body {
     </section>
     <main>
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search for cars..." oninput="searchCars()">
-            <button id="searchButton"onclick="searchCars()">Search</button>
+            <input type="text" id="searchInput" placeholder="Search for cars..." oninput="searchCars()"autocorrect="on">
+            <button id="searchButton" onclick="searchCars()">Search</button>
             <div class="search-results" id="searchResults"></div>
         </div>
         <div id="loadingSpinner" class="spinner hidden">
@@ -458,8 +470,8 @@ body {
                 <p>Versatile and spacious for its size</p>
             </div>
             <div class="car-item" >
-                        <img src="2023_kia_rio_angularfront.jpg" alt="Car Image">
-                        <h2 data-car="2023 kia Rio Angularfront" data-image="2023_kia_rio_angularfront.jpg">2023 Kia Rio</h2>
+                        <img src="2023_kia_rio_angularfront.png" alt="Car Image">
+                        <h2 data-car="2023 kia Rio Angularfront" data-image="2023_kia_rio_angularfront.png">2023 Kia Rio</h2>
                         <button class="reserve-btn" data-car="2023 kia Rio Angularfront">Reserve</button>
                         <span class="reserved-text hidden">Reserved</span>
                         <h2 data-car="2024 Nissan Versa" data-image="2024 Nissan Versa.jpg">2024 Nissan Versa</h2>
@@ -603,29 +615,46 @@ body {
         const auth = getAuth(app);
         const db = getFirestore(app); // Initialize Firestore
         const analytics = getAnalytics(app);
-        
 
         function searchCars() {
-            const searchInputValue = document.getElementById('searchInput').value.toLowerCase();
-            const carItems = document.querySelectorAll('.car-item');
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const carItems = document.querySelectorAll('.car-item h2');
             const searchResults = document.getElementById('searchResults');
             searchResults.innerHTML = ''; // Clear previous search results
-            
 
-            carItems.forEach(item => {
-                const carName = item.querySelector('h2').textContent.toLowerCase();
-                if (carName.includes(searchInputValue)) {
-                    const carNameElement = document.createElement('div');
-                    carNameElement.textContent = item.querySelector('h2').textContent;
-                    carNameElement.classList.add('search-result-item');
-                    carNameElement.addEventListener('click', () => {
-                        item.scrollIntoView({ behavior: 'smooth' });
+            
+           carItems.forEach(carHeading => {
+                const carName = carHeading.textContent.toLowerCase();
+                if (carName.includes(input)) {
+                    const resultItem = document.createElement('div');
+                    resultItem.classList.add('search-result-item');
+                    resultItem.textContent = carHeading.textContent;
+                    resultItem.addEventListener('click', () => {
+                        carHeading.scrollIntoView({ behavior: 'smooth' });
+                        highlightCarHeading(carHeading);
                     });
-                    searchResults.appendChild(carNameElement);
+                    searchResults.appendChild(resultItem);
                 }
             });
+
+            if (input === '') {
+                searchResults.innerHTML = '';
+            }
         }
 
+        
+
+        function highlightCarHeading(carHeading) {
+            // Remove highlight from all car headings
+            document.querySelectorAll('.car-item h2').forEach(heading => {
+                heading.classList.remove('highlight');
+            });
+
+
+            // Add highlight to the clicked car heading
+            carHeading.classList.add('highlight');
+        }
+        
         // login and signup functionality
         let currentUser = null;
     
@@ -642,6 +671,7 @@ body {
         const signupForm = document.querySelector('#signup');
     const loginForm = document.getElementById('loginForm');
     const loadingSpinner = document.getElementById('loadingSpinner');
+
         function toggleSection(sectionToToggle, sectionToHide) {
             if (sectionToToggle.classList.contains('hidden')) {
                 sectionToToggle.classList.remove('hidden');
@@ -1079,10 +1109,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Return the URL of the uploaded file
     }
 
-    //Add event listeners to rent buttons
-    document.querySelectorAll('.reserve-btn').forEach(button => {
-        button.addEventListener('click', rentCar);
-    });
 });
 
 // (new code) Function to check if the user has already rented a car
@@ -1121,7 +1147,7 @@ async function handleCarClick(event) {
                 if (reserveButton) {
                     reserveButton.disabled = true;
                 }
-                alert('Car rented successfully!');
+                alert(`An email will be sent to ${auth.currentUser.email} in 5 to 6 business days confirming your that you have rented the car.`);
 
                 // Save rented car information to Firestore
                 const currentUser = auth.currentUser;
