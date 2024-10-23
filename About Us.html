@@ -33,6 +33,15 @@
             text-align: center;
             padding: 1rem;
         }
+	     footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
         nav ul {
             padding: 0;
             list-style-type: none;
@@ -459,8 +468,7 @@
                 console.log(' logged:', userCredential.user);
                 // Redirect to another page or update the UI
             } catch (error) {
-                console.error('Error logging in:', error);
-                alert('Login failed: ' + error.message);
+               
             } finally {
                 if (loadingSpinner) loadingSpinner.classList.add('hidden');
             }
